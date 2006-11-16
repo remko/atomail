@@ -1,0 +1,11 @@
+AtoMail ChangeLog
+-----------------
+
+0.6
+- Handle recursive multi-part messages correctly
+- Allow messages without contents
+
+0.5
+- Give HTML messages priority
+- Fix incorrect check for already existing messages in feed
+- Simplify message retrieval
