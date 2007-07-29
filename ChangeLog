@@ -2,6 +2,7 @@ AtoMail ChangeLog
 -----------------
 
 0.7
+- Trim spaces from subject prefixes
 
 0.6
 - Handle recursive multi-part messages correctly

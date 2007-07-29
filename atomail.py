@@ -217,7 +217,7 @@ class MessageFeed :
 		else :
 			title_text = '(No Subject)'
 		if self.strip_subject :
-			title_text = re.sub('\[[a-zA-Z0-9:_\. -]*\]','',title_text)
+			title_text = re.sub('\[[a-zA-Z0-9:_\. -]*\]\s*','',title_text)
 		title.appendChild(self.doc.createTextNode(title_text))
 		entry.appendChild(title)
 		logging.debug('Title: ' + title_text)
