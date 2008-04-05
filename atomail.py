@@ -112,6 +112,8 @@ def message_contents(message) :
 def current_datetime() :
 	now = datetime.datetime.now()
 	current_tz = round(float((datetime.datetime.now() - datetime.datetime.utcnow()).seconds)/3600)
+	if current_tz > 12 :
+		current_tz -= 24
 	return now.replace(tzinfo=TZ(current_tz))
 
 def from_atom_date(date) :
