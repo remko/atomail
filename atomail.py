@@ -39,7 +39,6 @@ __copyright__ = """
 
 # TODO:
 # - Warn about missing SSL
-# - Handle mail body encodings correctly
 
 ################################################################################
 # Imports
@@ -58,8 +57,6 @@ PROGRAM_NAME = 'AtoMail'
 PROGRAM_URI = 'http://el-tramo.be/software/atomail'
 PROGRAM_USAGESTRING = "usage: %prog [options] file"
 PROGRAM_VERSIONSTRING = PROGRAM_NAME + ' ' + __version__ + '\nWritten by ' + __author__ + '\n' + 'For more information, please visit ' + PROGRAM_URI
-
-MAIL_ENCODING = 'utf-8' # FIXME
 
 ATOM_NS = 'http://www.w3.org/2005/Atom'
 
@@ -92,15 +89,15 @@ def message_date(message) :
     logging.warning('Unable to parse date \'' + message['Date'] + '\'')
     return datetime.datetime(datetime.MINYEAR,1,1)
 
-def message_contents(message) :
+def message_contents(message, default_charset) :
   contents = []
   if message.is_multipart() :
     for submessage in message.get_payload() :
-      contents += message_contents(submessage)
+      contents += message_contents(submessage, default_charset)
   else :
     payload = message.get_payload(decode=True)
     if payload : 
-      content = payload.decode(MAIL_ENCODING,'ignore')
+      content = unicode(payload, get_charset(message, default_charset), "replace")
       content_type = message.get_content_type()
       if content_type == 'text/plain' :
         contents = [('text',content)]
@@ -142,6 +139,14 @@ def decode_header(header, default) :
   for (result, encoding) in email.header.decode_header(header if header else default) :
     decoded_header += result.decode(encoding, "ignore") if encoding else result
   return decoded_header
+
+def get_charset(message, default="ascii"):
+  if message.get_content_charset() :
+    return message.get_content_charset()
+  elif message.get_charset() :
+    return message.get_charset()
+  else :
+    return default
 
 ################################################################################
 # MessageFeed 
@@ -230,7 +235,7 @@ class MessageFeed :
 
     # Content
     content = self.doc.createElement('content')
-    contents = message_contents(message)
+    contents = message_contents(message, get_charset(message))
     if contents :
       # Add the preferred content
       contents.sort(lambda x, y : cmp(x,y))
