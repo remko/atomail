@@ -185,7 +185,7 @@ class MessageFeed :
 		entry.appendChild(id)
 
 		# Author
-		from_address = message['From'].decode(MAIL_ENCODING,'ignore')
+		from_address = message['From'].decode(MAIL_ENCODING,'ignore') if message['From'] != None else ""
 		(name,address) = email.Utils.parseaddr(from_address)
 		author = self.doc.createElement('author')
 		author_name = self.doc.createElement('name')
