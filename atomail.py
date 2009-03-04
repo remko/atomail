@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 ################################################################################
 # Module information
@@ -16,10 +17,10 @@
 """
 
 __all__ = ['MessageFeed', 'MailSource', 'PipeSource', 'MailboxSource', 'IMAPSource', 'POP3Source', 'NNTPSource', 'ATOM_NS' ]
-__author__ = 'Remko Troncon'
+__author__ = 'Remko Tronçon'
 __version__ = '0.7-dev'
 __copyright__ = """
-  Copyright (C) 2006  Remko Troncon
+  Copyright (C) 2006  Remko Tronçon
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
