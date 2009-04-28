@@ -3,6 +3,10 @@ AtoMail ChangeLog
 
 See Git history for recent developments.
 
+0.8
+- Fixed outstanding issues with encodings
+- Fixed problem with timezone conversion (Thanks to Carl Duisberg)
+
 0.7
 - Trim spaces from subject prefixes
 
