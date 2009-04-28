@@ -18,7 +18,7 @@
 
 __all__ = ['MessageFeed', 'MailSource', 'PipeSource', 'MailboxSource', 'IMAPSource', 'POP3Source', 'NNTPSource', 'ATOM_NS' ]
 __author__ = 'Remko Tronçon'
-__version__ = '0.8'
+__version__ = '0.9-dev'
 __copyright__ = """
   Copyright (C) 2006  Remko Tronçon
 
