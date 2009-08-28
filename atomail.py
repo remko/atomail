@@ -59,6 +59,7 @@ PROGRAM_USAGESTRING = "usage: %prog [options] file"
 PROGRAM_VERSIONSTRING = PROGRAM_NAME + ' ' + __version__ + '\nWritten by ' + __author__ + '\n' + 'For more information, please visit ' + PROGRAM_URI
 
 ATOM_NS = 'http://www.w3.org/2005/Atom'
+DEFAULT_ENCODING = "iso8859-1" # This will be used to decode headers if no encoding is specified. Should probably be smarter about this. See usage for more info
 
 ################################################################################
 # Auxiliary functions and classes
@@ -137,6 +138,11 @@ def entry_date(entry) :
 def decode_header(header, default) :
   decoded_header = ""
   for (result, encoding) in email.header.decode_header(header if header else default) :
+    # Some mails don't have an encoding in the header, yet they do encode the
+    # header. We should do trial and error here, but for now assume it's 
+    # Iso8859-1.
+    if not encoding :
+      encoding = DEFAULT_ENCODING
     decoded_header += result.decode(encoding, "ignore") if encoding else result
   return decoded_header
 
