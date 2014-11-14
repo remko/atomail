@@ -1,4 +1,4 @@
-# [AtoMail](http://el-tramo.be/software/atomail)
+# [AtoMail](https://el-tramo.be/atomail)
 
 ## About
 
