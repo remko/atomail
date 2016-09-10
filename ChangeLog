@@ -3,6 +3,9 @@ AtoMail ChangeLog
 
 See Git history for recent developments.
 
+0.10
+- Force preformatted display of text-only entries.
+
 0.9
 - Fixed timezone handling
 

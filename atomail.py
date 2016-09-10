@@ -18,7 +18,7 @@
 
 __all__ = ['MessageFeed', 'MailSource', 'PipeSource', 'MailboxSource', 'IMAPSource', 'POP3Source', 'NNTPSource', 'ATOM_NS' ]
 __author__ = 'Remko Tronçon'
-__version__ = '0.9'
+__version__ = '0.10'
 __copyright__ = """
   Copyright (C) 2006-2016  Remko Tronçon
 
@@ -48,6 +48,7 @@ import sys, os.path, optparse, datetime, email, email.header, email.Utils, re, x
 import string, logging, md5, math
 from xml.dom import minidom
 import nntplib, imaplib, poplib, mailbox
+import cgi
 
 ################################################################################
 # Constants
@@ -247,6 +248,14 @@ class MessageFeed :
       # Add the preferred content
       contents.sort(lambda x, y : cmp(x,y))
       (content_type,content_text) = contents[0]
+
+      # Replace text content with HTML counterpart (if there is none)
+      # According to the spec, all whitespace in 'text' content can be collapsed. Since
+      # mails are typically formatted, we don't want this, so we use preformatted
+      if content_type == "text":
+        content_type = "html"
+        content_text = "<pre>" + cgi.escape(content_text) + "</pre>"
+
       content.setAttribute('type',content_type)
       content.appendChild(self.doc.createTextNode(content_text))
     else :
