@@ -18,9 +18,9 @@
 
 __all__ = ['MessageFeed', 'MailSource', 'PipeSource', 'MailboxSource', 'IMAPSource', 'POP3Source', 'NNTPSource', 'ATOM_NS' ]
 __author__ = 'Remko Tronçon'
-__version__ = '0.9-dev'
+__version__ = '0.9'
 __copyright__ = """
-  Copyright (C) 2006  Remko Tronçon
+  Copyright (C) 2006-2016  Remko Tronçon
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -44,8 +44,8 @@ __copyright__ = """
 # Imports
 ################################################################################
 
-import sys, os.path, optparse, datetime, email, email.header, email.Utils, time, re, xml
-import string, logging, md5
+import sys, os.path, optparse, datetime, email, email.header, email.Utils, re, xml
+import string, logging, md5, math
 from xml.dom import minidom
 import nntplib, imaplib, poplib, mailbox
 
@@ -54,7 +54,7 @@ import nntplib, imaplib, poplib, mailbox
 ################################################################################
 
 PROGRAM_NAME = 'AtoMail'
-PROGRAM_URI = 'http://el-tramo.be/software/atomail'
+PROGRAM_URI = 'https://el-tramo.be/atomail'
 PROGRAM_USAGESTRING = "usage: %prog [options] file"
 PROGRAM_VERSIONSTRING = PROGRAM_NAME + ' ' + __version__ + '\nWritten by ' + __author__ + '\n' + 'For more information, please visit ' + PROGRAM_URI
 
@@ -66,11 +66,11 @@ DEFAULT_ENCODING = "iso8859-1" # This will be used to decode headers if no encod
 ################################################################################
 
 class TZ(datetime.tzinfo) :
-  def __init__(self,hours=0) :
-    self.hours = hours
+  def __init__(self,seconds=0) :
+    self.seconds = seconds
     
   def utcoffset(self, dt) : 
-    return datetime.timedelta(hours=self.hours)
+    return datetime.timedelta(minutes=math.floor(self.seconds/60))
 
 def message_id(message) :
   hash = md5.new()
@@ -83,9 +83,10 @@ def message_id(message) :
   return hash.hexdigest()
 
 def message_date(message) :
-  date = email.Utils.parsedate(message["Date"])
+  date = email.Utils.parsedate_tz(message["Date"])
+  print(date)
   if date != None :
-    return datetime.datetime(date[0],date[1],date[2],date[3],date[4],date[5],date[6],TZ(date[7]))
+    return datetime.datetime(date[0],date[1],date[2],date[3],date[4],date[5],0,TZ(date[9]))
   else :
     logging.warning('Unable to parse date \'' + message['Date'] + '\'')
     return datetime.datetime(datetime.MINYEAR,1,1)
