@@ -399,12 +399,16 @@ class MailboxSource(MailSource) :
     
   def messages(self) :
     logging.info('Reading mails from ' + self.filename) 
-    mailbox = self.type(self.filename, email.message_from_file)
+    if self.type == mailbox.Maildir:
+      file = self.filename
+    else:
+      file = open(self.filename,'r')
+    mbox = self.type(file, email.message_from_file)
     mails = []
-    mail = mailbox.next()
+    mail = mbox.next()
     while mail != None :
       mails.append(mail)
-      mail = mailbox.next()
+      mail = mbox.next()
     mails.reverse()
     return mails
 
