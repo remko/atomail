@@ -399,8 +399,7 @@ class MailboxSource(MailSource) :
     
   def messages(self) :
     logging.info('Reading mails from ' + self.filename) 
-    file = open(self.filename,'r')
-    mailbox = self.type(file, email.message_from_file)
+    mailbox = self.type(self.filename, email.message_from_file)
     mails = []
     mail = mailbox.next()
     while mail != None :
